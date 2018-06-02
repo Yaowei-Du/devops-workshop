@@ -1,0 +1,13 @@
+---
+# tasks file for docker
+- name: install docker
+  import_tasks: install.yml
+  become: yes
+
+- name: configure docker
+  import_tasks: config.yml
+  become: yes
+
+- name: setup docker service
+  import_tasks: service.yml
+  become: yes

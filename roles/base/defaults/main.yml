@@ -1,0 +1,9 @@
+---
+# defaults file for base
+adcc_user: vagrant
+# only used in testing; it's fine to put plain text password here
+adcc_user_password: "{{ 'vagrant' | password_hash('sha512', 'salt') }}"
+adcc_group: vagrant
+adcc_groups:
+  - docker
+  - "{{ adcc_group }}"

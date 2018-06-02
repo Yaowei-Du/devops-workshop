@@ -1,0 +1,64 @@
+---
+# tasks file for jenkins
+- name: create jenkins directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ jenkins_master_data_dir }}"
+    - "{{ jenkins_config_data_dir }}"
+    - "{{ jenkins_master_data_dir }}/init.groovy.d"
+
+- name: create user config file
+  copy:
+    content: "{{ jenkins_user|to_json }}"
+    dest: "{{ jenkins_config_data_dir }}/user.json"
+
+- name: create credential config file
+  copy:
+    content: "{{ jenkins_credential|to_json }}"
+    dest: "{{ jenkins_config_data_dir }}/credential.json"
+
+- name: create secret text config file
+  copy:
+    content: "{{ jenkins_secret_text|to_json }}"
+    dest: "{{ jenkins_config_data_dir }}/secret-text.json"
+
+- name: create envvar config file
+  copy:
+    content: "{{ jenkins_envvars|to_json }}"
+    dest: "{{ jenkins_config_data_dir }}/envvars.json"
+
+- name: fetch docker group
+  getent:
+    database: group
+    key: docker
+    split: ':'
+
+- name: start jenkins server as service
+  include_role:
+    name: container_service
+  vars:
+    cs_name: "{{ jenkins_master_name }}"
+    cs_image: "{{ jenkins_master_image }}:{{ jenkins_master_version }}"
+    cs_do_restart: yes
+    cs_log_driver: 'journald'
+    cs_run_opts: |
+      --group-add {{ getent_group.docker[1] }}
+      -v {{ jenkins_master_data_dir }}:/var/jenkins_home
+      -v {{ jenkins_config_data_dir }}:/usr/share/jenkins/ref/customize
+      -v /var/run/docker.sock:/var/run/docker.sock
+      -e JAVA_OPTS=-Djenkins.install.runSetupWizard=false
+      {% for port in jenkins_master_ports %}
+      -p {{ port }}:8080
+      {% endfor %}
+      -p {{ jenkins_swarm_port }}:50000
+
+- name: wait for jenkins server to be ready...
+  uri:
+    url: "http://localhost:{{ jenkins_master_ports[0] }}/login"
+    status_code: 200
+  register: r
+  until: r is succeeded
+  retries: 30
+  delay: 1

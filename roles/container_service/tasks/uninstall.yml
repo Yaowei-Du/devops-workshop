@@ -1,0 +1,16 @@
+---
+- debug: msg="removing systemd service '{{ cs_name }}.service' in {{ 'user' if cs_user_mode else 'system' }} mode"
+- name: check if service is already removed
+  stat: path="{{ cs_service_config_path }}"
+  register: r
+- block:
+    - name: stop and disable service
+      systemd:
+        name: "{{ cs_name }}"
+        state: stopped
+        enabled: no
+        user: "{{ cs_user_mode }}"
+    - name: remove service configuration
+      file: path="{{ cs_service_config_path }}" state=absent
+      notify: reload systemd
+  when: r.stat.exists

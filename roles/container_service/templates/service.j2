@@ -1,0 +1,26 @@
+[Unit]
+{% if cs_description %}
+Description={{ cs_description }}
+{% else %}
+Description={{ cs_name }} Container
+{% endif %}
+{% if cs_service_extra_dependencies %}
+{{ cs_service_extra_dependencies }}
+{% endif %}
+
+[Service]
+{% if cs_service %}
+{{ cs_service }}
+{% else %}
+{{ cs_service_extra_pre }}
+ExecStartPre=-/usr/bin/docker kill {{ cs_name }}
+ExecStartPre=-/usr/bin/docker rm {{ cs_name }}
+ExecStartPre=-/usr/bin/whoami
+ExecStart=/usr/bin/docker run --name {{ cs_name }} {{ cs_run_opts.replace('\n', ' ') }} {{ cs_image }} {{ cs_command.replace('\n', ' ') }}
+ExecStop=/usr/bin/docker stop {{ cs_name }}
+Restart={{ cs_restart_strategy }}
+{{ cs_service_extra }}
+{% endif %}
+
+[Install]
+WantedBy={% if cs_user_mode %}default{% else %}multi-user{% endif %}.target

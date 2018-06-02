@@ -1,0 +1,40 @@
+---
+- name: add repositories
+  zypper_repository:
+    name: "{{ item.name }}"
+    repo: "{{ item.repo }}"
+    auto_import_keys: yes
+    overwrite_multiple: yes
+    state: present
+  with_items:
+    - {
+      repo: "http://download.opensuse.org/repositories/devel:languages:python/SLE_12_SP3/",
+      name: "devel:languages:python.repo"
+    }
+    - {
+      repo: "http://download.opensuse.org/repositories/Virtualization:/containers/SLE_12_SP1/",
+      name: "Virtualization:containers.repo"
+    }
+
+- name: install python pip
+  zypper:
+    name: python-pip
+    state: present
+
+- name: install pexpect module
+  pip:
+    name: pexpect
+    state: present
+
+- name: install docker
+  expect:
+    command: zypper in {{ docker_package_name }}
+    timeout: "{{ docker_timeout }}"
+    responses:
+      ".*Choose from.*": "2"
+      ".*Continue.*": "y"
+
+- name: install docker client
+  pip:
+    name: docker-py
+    state: present

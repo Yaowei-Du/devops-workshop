@@ -1,0 +1,7 @@
+---
+# vars file for container_service
+cs_states:
+  - present
+  - absent
+cs_service_config_dir: "{{ '~/.config/systemd/user' if cs_user_mode else '/etc/systemd/system' }}"
+cs_service_config_path: "{{ cs_service_config_dir }}/{{ cs_name }}.service"

@@ -1,0 +1,16 @@
+---
+- name: create groups
+  group: name="{{ item }}" state=present
+  with_items: "{{ adcc_groups }}"
+- name: create adcc user
+  user: name="{{ adcc_user }}" group="{{ adcc_user }}" groups="{{ adcc_groups }}" password="{{ adcc_user_password }}"
+- name: ensure data directory exists
+  file: path="{{ item }}" state=directory owner="{{ adcc_user }}" mode=0755
+  with_items: "{{ adcc_data_dirs }}"
+- name: automatic start-up of systemd user instance
+  command: loginctl enable-linger {{ adcc_user }}
+  changed_when: no
+- name: ensure hostname vagrant can be resolved
+  lineinfile:
+    path: /etc/hosts
+    line: '127.0.0.1 vagrant'

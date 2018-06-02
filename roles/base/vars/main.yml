@@ -1,0 +1,5 @@
+---
+# vars file for base
+adcc_data_dirs:
+  - /var/data/
+  - /var/app/

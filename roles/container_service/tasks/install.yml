@@ -1,0 +1,42 @@
+---
+- debug: msg="configuring systemd service '{{ cs_name }}.service' to run image '{{ cs_image }}' in {{ 'user' if cs_user_mode else 'system'}} mode"
+- name: ensure service config directory exists
+  file: path="{{ cs_service_config_dir }}" state=directory
+- name: create service configuration
+  template: src=service.j2 dest="{{ cs_service_config_path }}"
+  register: r
+- name: ensure docker image exists
+  command: docker pull {{ cs_image }}
+  register: pull_result
+  changed_when: pull_result.rc == 0 and 'newer image' in pull_result.stdout_lines[-1]
+  # it's better to use docker_image module
+  # however the version of docker-py in ADCC is 1.5, which is lower than
+  # the minimum required by ansible.
+  # docker_image:
+  #   name: "{{ cs_image }}"
+  #   force: yes
+  # we could have used notify to trigger the restarts
+  # however, this role may be used multiple times in a single play
+  # ansible will only trigger a handler once
+  # to properly restart the services, we use a task instead
+- name: restart container service
+  systemd:
+    name: "{{ cs_name }}"
+    daemon_reload: yes
+    state: restarted
+    enabled: yes
+    user: "{{ cs_user_mode }}"
+  when: "(r.changed or cs_do_restart) and cs_restart_action == 'restart'"
+- name: reload container service
+  systemd:
+    name: "{{ cs_name }}"
+    daemon_reload: yes
+    state: reloaded
+    enabled: yes
+    user: "{{ cs_user_mode }}"
+  when: "(r.changed or cs_do_restart) and cs_restart_action == 'reload'"
+- name: ensure service is started
+  systemd:
+    name: "{{ cs_name }}"
+    state: started
+    user: "{{ cs_user_mode }}"

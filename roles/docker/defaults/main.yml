@@ -1,0 +1,7 @@
+---
+# defaults file for docker
+docker_package_name: 'docker'
+
+docker_timeout: 10000
+
+docker_registry_mirrors: []

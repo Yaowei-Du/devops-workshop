@@ -1,0 +1,4 @@
+---
+# handlers file for container_service
+- name: reload systemd
+  systemd: daemon_reload=true user="{{ cs_user_mode }}"

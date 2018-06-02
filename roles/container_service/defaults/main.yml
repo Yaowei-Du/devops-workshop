@@ -1,0 +1,15 @@
+---
+# defaults file for container_service
+cs_description: ''
+cs_service: ''
+cs_command: ''
+cs_run_opts: ''
+cs_service_extra: ''
+cs_service_extra_pre: ''
+cs_restart_action: restart
+cs_restart_strategy: on-failure
+cs_do_restart: no
+cs_state: present
+cs_user_mode: yes
+cs_log_driver: 'fluentd'
+cs_service_extra_dependencies: ''

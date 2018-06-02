@@ -1,0 +1,11 @@
+---
+# tasks file for container_service
+- fail:
+    msg: cs_state can only be one of {{ cs_states }}
+  when: cs_state not in cs_states
+- name: install service
+  import_tasks: install.yml
+  when: cs_state == 'present'
+- name: uninstall service
+  import_tasks: uninstall.yml
+  when: cs_state == 'absent'

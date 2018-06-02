@@ -1,0 +1,33 @@
+---
+# defaults file for jenkins
+jenkins_master_name: jenkins-master
+jenkins_master_image: chinaapps/jenkins-docker
+jenkins_master_version: latest
+
+jenkins_master_ports:
+  - 8080
+jenkins_swarm_port: 50000
+
+# data
+jenkins_master_data_dir: "/var/data/jenkins_home"
+jenkins_config_data_dir: "/var/data/jenkins_config"
+
+jenkins_user:
+  - username: "devops"
+    password: "devops"
+    description: "login admin user"
+
+jenkins_credential:
+  - id: "jenkins-swarm-password"
+    description: "Jenkins swarm with Password Configuration"
+    username: "swarm"
+    password: "swarm"
+
+jenkins_secret_text:
+  - id: "ansible-vault-pass"
+    text: "pass"
+    description: "ansible vault pass"
+
+jenkins_envvars:
+  - key: "jenkins_var"
+    value: "Jenkins Var"

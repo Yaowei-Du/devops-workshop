@@ -1,0 +1,10 @@
+---
+- name: register docker service
+  service:
+    name: docker
+    enabled: yes
+    state: restarted
+- name: grant docker containers to use docker socket
+  file:
+    path: /var/run/docker.sock
+    mode: 0777
