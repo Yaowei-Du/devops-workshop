@@ -1,0 +1,26 @@
+# idea
+*.iml
+.idea/
+
+# MaxOS
+.DS_Store
+
+# ctags
+tags
+
+# ctrlp
+.ctrlp
+
+# vagrant
+.vagrant
+.molecule
+
+# ansible
+*.retry
+.galaxy/
+
+# npm
+yarn.lock
+
+# tmp
+tmp/

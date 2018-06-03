@@ -1,5 +1,4 @@
-# CI/CD Workshop
-
+# DevOps Workshop
 
 
 ## Prerequisites
@@ -11,7 +10,6 @@
 
 ```
 make prepare
-make install
 ```
 
 ### And coding style checks
@@ -36,4 +34,4 @@ open localhost:8080
 
 If you have any questions or ideas, please send email to:
 
-​    d.yaowei@gmail.com
+    d.yaowei@gmail.com

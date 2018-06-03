@@ -1,5 +1,12 @@
 ---
 - name: Prepare
   hosts: all
-  gather_facts: false
-  tasks: []
+  gather_facts: False
+  pre_tasks:
+    - name: Install python for Ansible
+      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+      become: True
+      changed_when: False
+  roles:
+    - role: docker
+      docker_registry_mirrors: ['https://registry.docker-cn.com']
