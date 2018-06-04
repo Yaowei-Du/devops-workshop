@@ -3,3 +3,6 @@ ansible-lint==3.4.21
 molecule==2.14.0
 docker==3.3.0
 python-vagrant==0.5.15
+cryptography==2.0.3
+passlib==1.7.1
+pycrypto==2.6
