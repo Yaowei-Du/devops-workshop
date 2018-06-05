@@ -1,21 +1,10 @@
 # DevOps Workshop
 
-
-## Prerequisites
-
-- Homebrew & Homebrew cask
-- Vagrant
-
 ## Installing
 
 ```
+git clone https://github.com/Yaowei-Du/devops-workshop.git
 make prepare
-```
-
-### And coding style checks
-
-```
-make lint
 ```
 
 ## Deployment
@@ -27,7 +16,7 @@ make run
 ## Website
 
 ```
-open localhost:8080
+open localhost:18080
 ```
 
 ## Contacts
