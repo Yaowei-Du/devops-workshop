@@ -1,0 +1,18 @@
+pipeline {
+  agent {
+    docker {
+      image "chinaapps/ansible:latest"
+      args "-u root:root"
+    }
+  }
+  stages {
+    stage("Deploy") {
+      steps {
+        script {
+            sh("ansible-playbook -i inventories/test spring-boot-docker.yml")
+          }
+        }
+      }
+    }
+  }
+}
