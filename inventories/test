@@ -2,3 +2,10 @@ vagrant ansible_host=127.0.0.1 ansible_port=2322 ansible_ssh_user=vagrant ansibl
 
 [jenkins]
 vagrant
+
+[wordpress_db]
+vagrant
+
+[wordpress_app]
+vagrant
+

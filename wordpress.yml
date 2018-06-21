@@ -1,0 +1,46 @@
+---
+- name: prepare folders
+  hosts: wordpress_db
+  tasks:
+    - name: make data directory for wordpress
+      file: path="{{ wordpress_folder }}" state=directory
+
+- name: install database
+  hosts: wordpress_db
+  tags: db
+  roles:
+    - role: container_service
+      cs_name: wordpress_db
+      cs_image: mysql:5.7
+      cs_run_opts: |
+        -p {{ wordpress_db_port }}:3306
+        -v {{ wordpress_folder }}/db_data:/var/lib/mysql
+        -e MYSQL_ROOT_PASSWORD={{ wordpress_db_root_password }}
+        -e MYSQL_DATABASE={{ wordpress_db_database }}
+        -e MYSQL_USER={{ wordpress_db_user }}
+        -e MYSQL_PASSWORD={{ wordpress_db_password }}
+
+- name: install wordpress
+  hosts: wordpress_app
+  roles:
+    - role: container_service
+      cs_name: wordpress
+      cs_image: wordpress:latest
+      cs_do_restart: yes
+      cs_run_opts: |
+        -p {{ wordpress_port }}:80
+        -e WORDPRESS_DB_HOST={{ wordpress_db_host }}:{{ wordpress_db_port }}
+        -e WORDPRESS_DB_USER={{ wordpress_db_user }}
+        -e WORDPRESS_DB_PASSWORD={{ wordpress_db_password }}
+  post_tasks:
+    - name: health check
+      uri:
+        url: http://127.0.0.1:{{ wordpress_port }}
+        status_code:
+          - 200
+          - 301
+        follow_redirects: none
+      register: r
+      until: r is succeeded
+      retries: 6
+      delay: 0.5
