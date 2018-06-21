@@ -24,3 +24,6 @@ yarn.lock
 
 # tmp
 tmp/
+
+# git crypt
+.git-crypt.key

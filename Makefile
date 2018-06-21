@@ -2,6 +2,7 @@
 
 prerequisites:
 	/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+	brew install python git-crypt
 	brew tap homebrew/cask
 	brew cask install virtualbox vagrant
 
