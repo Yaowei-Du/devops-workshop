@@ -1,19 +1,39 @@
 # DevOps Workshop
 
-## Installing
+## Prerequisites
 
 ```
 git clone https://github.com/Yaowei-Du/devops-workshop.git
 make prepare
 ```
 
-## Deployment
+## Jenkins
+
+### Deployment
 
 ```
 make run
 ```
 
-## Website
+### Website
+
+Jenkins Url:
+
+```
+open localhost:18081
+```
+
+## Wordpress(sample project)
+
+### Deployment
+
+```
+ansible-playbook -i inventories/test wordpress.yml
+```
+
+### Website
+
+Wordpress Url:
 
 ```
 open localhost:18080
