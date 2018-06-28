@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-```
+```shell
 git clone https://github.com/Yaowei-Du/devops-workshop.git
 make prepare
 ```
@@ -11,7 +11,7 @@ make prepare
 
 ### Deployment
 
-```
+```shell
 make run
 ```
 
@@ -19,7 +19,7 @@ make run
 
 Jenkins Url:
 
-```
+```shell
 open localhost:18081
 ```
 
@@ -27,7 +27,15 @@ open localhost:18081
 
 ### Deployment
 
+Copy the `git-crypt.key` to `.git-crypt.key`.
+
+```shell
+cp git-crypt.key .git-crypt.key
 ```
+
+> Hint: Do not store the key in Version Control in a real project.
+
+```shell
 ansible-playbook -i inventories/test wordpress.yml
 ```
 
@@ -35,7 +43,7 @@ ansible-playbook -i inventories/test wordpress.yml
 
 Wordpress Url:
 
-```
+```shell
 open localhost:18080
 ```
 
